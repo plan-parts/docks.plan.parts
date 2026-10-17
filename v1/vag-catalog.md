@@ -31,7 +31,7 @@ curl -H "Authorization: Bearer TOKEN" \
   "https://plan.parts/api/v1/vag/catalogs"
 ```
 
-Returns: VW, Audi, Skoda, SEAT, Porsche catalog identifiers.
+Returns: `VW`, `AU` (Audi), `SK` (Skoda), `SE` (SEAT), `PO` (Porsche), `ML` (MAN).
 
 ---
 
@@ -42,10 +42,11 @@ Search vehicles by catalog, model, year, or text query.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `catalog` | string | No | Catalog ID from `/catalogs` |
-| `model` | string | No | Model name |
-| `year` | integer | No | Production year |
+| `catalog` | string | **Yes** | Catalog ID: `AU`, `VW`, `SK`, `SE`, `PO`, `ML` |
+| `model` | string | No | Model name filter (also accepted as `modell`) |
+| `year` | integer | No | Production year filter |
 | `q` | string | No | Free-text search query |
+| `limit` | integer | No | Max results 1–500 (default: 100) |
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
@@ -55,7 +56,7 @@ curl -H "Authorization: Bearer TOKEN" \
 ---
 
 ### `GET /vin/{vin}`
-**Cost:** 1 token
+**Cost:** 2 tokens
 
 Decode a VIN to vehicle specification.
 
@@ -75,35 +76,45 @@ curl -H "Authorization: Bearer TOKEN" \
 ### `GET /vehicle/{epis_typ}/groups`
 **Cost:** 1 token
 
-List of part groups for a vehicle.
+List of main part groups for a vehicle.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `epis_typ` | string | Yes (path) | Vehicle type ID from `/vehicles` |
+| `epis_typ` | integer | Yes (path) | Vehicle type ID from `/vehicles` |
+| `catalog` | string | **Yes** | Catalog ID: `AU`, `VW`, `SK`, `SE`, `PO`, `ML` |
+| `markt` | string | No | Market code (default: `RDW`) |
+| `lang` | string | No | Language: `DE`, `EN`, `RU` (default: `EN`) |
 
 ---
 
 ### `GET /vehicle/{epis_typ}/subgroups`
 **Cost:** 1 token
 
-List of part subgroups for a specific group.
+List of part subgroups. Returns `hg_ug` and `bildtafel2` values needed for `/parts`.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `epis_typ` | string | Yes (path) | Vehicle type ID |
-| `group_id` | integer | Yes (query) | Group ID from `/groups` |
+| `epis_typ` | integer | Yes (path) | Vehicle type ID from `/vehicles` |
+| `catalog` | string | **Yes** | Catalog ID: `AU`, `VW`, `SK`, `SE`, `PO`, `ML` |
+| `hg` | integer | No | Main group code from `/groups` (filter by group) |
+| `dir_name` | string | No | Direction/section code (default: `R`) |
+| `lang` | string | No | Language: `DE`, `EN`, `RU` (default: `EN`) |
 
 ---
 
 ### `GET /vehicle/{epis_typ}/parts`
 **Cost:** 2 tokens
 
-List of OEM parts for a vehicle subgroup.
+List of OEM parts for a vehicle subgroup. Use values from `/subgroups` response.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `epis_typ` | string | Yes (path) | Vehicle type ID |
-| `subgroup_id` | integer | Yes (query) | Subgroup ID from `/subgroups` |
+| `epis_typ` | integer | Yes (path) | Vehicle type ID from `/vehicles` |
+| `catalog` | string | **Yes** | Catalog ID: `AU`, `VW`, `SK`, `SE`, `PO`, `ML` |
+| `hg_ug` | string | **Yes** | Subgroup code from `/subgroups` (e.g. `10-2`) |
+| `bildtafel2` | integer | **Yes** | Diagram ID from `/subgroups` |
+| `dir_name` | string | No | Direction/section code (default: `R`) |
+| `lang` | string | No | Language: `DE`, `EN`, `RU` (default: `EN`) |
 
 ---
 
@@ -117,6 +128,7 @@ OEM part details: name, status, synonyms, replacements.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `number` | string | Yes (path) | OEM part number, e.g. `03L115562` |
+| `lang` | string | No | Language: `DE`, `EN`, `RU` (default: `EN`) |
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
@@ -130,9 +142,15 @@ curl -H "Authorization: Bearer TOKEN" \
 
 Cross-reference numbers (IAM analogs) for an OEM part.
 
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `number` | string | Yes (path) | OEM part number |
+| `limit` | integer | No | Max results 1–500 (default: 200) |
+| `type` | string | No | Filter by type: `OEM`, `IAM`, `OE`, `EAN` |
+
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/vag/part/03L115562/cross"
+  "https://plan.parts/api/v1/vag/part/03L115562/cross?type=IAM&limit=50"
 ```
 
 ---
@@ -142,12 +160,20 @@ curl -H "Authorization: Bearer TOKEN" \
 
 List of vehicles that use a specific OEM part.
 
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `number` | string | Yes (path) | OEM part number |
+
 ---
 
 ### `GET /part/{number}/price`
 **Cost:** 1 token
 
 Official OEM price for a part.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `number` | string | Yes (path) | OEM part number |
 
 ---
 
@@ -156,12 +182,20 @@ Official OEM price for a part.
 
 Images for an OEM part.
 
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `number` | string | Yes (path) | OEM part number |
+
 ---
 
 ### `GET /part/{number}/supersessions`
 **Cost:** 1 token
 
 Successor and predecessor part numbers (replacement chain).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `number` | string | Yes (path) | OEM part number |
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
@@ -174,24 +208,24 @@ curl -H "Authorization: Bearer TOKEN" \
 
 ```
 GET /vag/catalogs
-  → get catalog ID for "VW"
+  → get catalog ID: "VW"
 
 GET /vag/vehicles?catalog=VW&model=Golf&year=2018
   → get epis_typ for the vehicle
 
-GET /vag/vehicle/{epis_typ}/groups
-  → pick group "Engine"
+GET /vag/vehicle/{epis_typ}/groups?catalog=VW&lang=EN
+  → pick group, note hg code
 
-GET /vag/vehicle/{epis_typ}/subgroups?group_id=...
-  → pick subgroup "Oil Filter"
+GET /vag/vehicle/{epis_typ}/subgroups?catalog=VW&hg=10&lang=EN
+  → pick subgroup, note hg_ug and bildtafel2
 
-GET /vag/vehicle/{epis_typ}/parts?subgroup_id=...
-  → get OEM part number, e.g. 03L115562
+GET /vag/vehicle/{epis_typ}/parts?catalog=VW&hg_ug=10-2&bildtafel2=2&lang=EN
+  → get OEM part numbers, e.g. 03L115562
 
 GET /vag/part/03L115562
   → name, status, replacements
 
-GET /vag/part/03L115562/cross
+GET /vag/part/03L115562/cross?type=IAM
   → IAM analogs: BOSCH F026407123, MANN W712/95...
 
 GET /vag/part/03L115562/price
