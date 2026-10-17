@@ -2,7 +2,7 @@
 
 6 endpoints for sports and power equipment parts — ATVs, motorcycles, watercraft.
 
-**Base path:** `https://plan.parts/api/v1/pc`
+**Base path:** `https://cdn.plan.parts/api/v1/pc`
 
 ---
 
@@ -15,7 +15,7 @@ List of all top-level equipment groups (ATVs, motorcycles, watercraft, snowmobil
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/pc/groups"
+  "https://cdn.plan.parts/api/v1/pc/groups"
 ```
 
 ---
@@ -33,7 +33,7 @@ Brands available for a given equipment group.
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/pc/brands?group_id=1"
+  "https://cdn.plan.parts/api/v1/pc/brands?group_id=1"
 ```
 
 ---
@@ -85,7 +85,7 @@ Spare parts list with articles and images for a specific assembly.
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/pc/parts?body_id=301"
+  "https://cdn.plan.parts/api/v1/pc/parts?body_id=301"
 ```
 
 ---

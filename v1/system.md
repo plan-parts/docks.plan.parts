@@ -13,7 +13,7 @@ Verifies connection and token validity. Use this to check that your API key is w
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/ping"
+  "https://cdn.plan.parts/api/v1/ping"
 ```
 
 **Response (success):**

@@ -2,7 +2,7 @@
 
 15 endpoints for cross-reference lookup, vehicle catalog, and article data.
 
-**Base path:** `https://plan.parts/api/v1/aftermarket`
+**Base path:** `https://cdn.plan.parts/api/v1/aftermarket`
 
 ---
 
@@ -14,7 +14,7 @@
 Check Aftermarket API availability.
 
 ```bash
-curl "https://plan.parts/api/v1/aftermarket/health"
+curl "https://cdn.plan.parts/api/v1/aftermarket/health"
 ```
 
 ---
@@ -34,12 +34,12 @@ Find OEM and IAM analog articles by article number + brand. Supports IAM numbers
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/aftermarket/analogs?article=F026407123&brand=BOSCH"
+  "https://cdn.plan.parts/api/v1/aftermarket/analogs?article=F026407123&brand=BOSCH"
 ```
 
 **Example use case:** Customer asks for Bosch `F026407123` — find all equivalent MANN, MAHLE, WIX parts.
 
-> **Tip:** If brand is unknown, use [`/search`](#get-search) first to identify the article and its brand.
+> **Note:** Both `article` and `brand` are required. If brand is unknown, use [`/search`](#get-search) first to identify it.
 
 ---
 
@@ -55,7 +55,7 @@ OEM and cross-reference numbers for a specific article.
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/aftermarket/articles/12345678/crosses"
+  "https://cdn.plan.parts/api/v1/aftermarket/articles/12345678/crosses"
 ```
 
 ---
@@ -67,12 +67,12 @@ Search articles by number. Accepts IAM article numbers, OEM numbers, and EAN cod
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `q` | string | Yes | Article number, OEM, or EAN |
-| `type` | string | No | Filter by type: `OENumber`, `EAN`, `IAM` |
+| `q` | string | Yes | Article/OEM/EAN/IAM code |
+| `type` | string | No | Search type: `OEM`, `ART`, `EAN`, `IAM` (default: `ART`) |
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/aftermarket/search?q=03L115562"
+  "https://cdn.plan.parts/api/v1/aftermarket/search?q=03L115562&type=OEM"
 ```
 
 ---
@@ -84,13 +84,13 @@ Autocomplete suggestions for an article search query. Minimum 2 characters.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `q` | string | Yes | Partial article or brand name (min 2 chars) |
-| `lang` | string | No | Response language |
-| `limit` | integer | No | Max suggestions to return |
+| `q` | string | Yes | Search query (min 2 characters) |
+| `lang` | string | No | Language: `en`, `ru`, `de` (default: `en`) |
+| `limit` | integer | No | Max results 1–20 (default: `10`) |
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/aftermarket/search/suggest?q=F026"
+  "https://cdn.plan.parts/api/v1/aftermarket/search/suggest?q=F026&limit=5"
 ```
 
 ---
@@ -109,7 +109,7 @@ Full article details: name, brand, attributes, images, OEM numbers.
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/aftermarket/articles/12345678"
+  "https://cdn.plan.parts/api/v1/aftermarket/articles/12345678"
 ```
 
 ---
@@ -145,9 +145,9 @@ Compatible vehicles (fitments/linkages) for an aftermarket article. Supports pag
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `art_id` | integer | Yes (path) | Article ID |
-| `lang` | string | No | Response language |
-| `page` | integer | No | Page number |
-| `per_page` | integer | No | Items per page |
+| `lang` | string | No | Language (default: `en`) |
+| `page` | integer | No | Page number (default: `1`) |
+| `per_page` | integer | No | Results per page, max 100 (default: `50`) |
 
 ---
 
@@ -167,7 +167,7 @@ Search vehicles by brand, model, engine, year, or K-Type identifier.
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/aftermarket/ktype?brand=VW&model=Golf&year=2018"
+  "https://cdn.plan.parts/api/v1/aftermarket/ktype?brand=VW&model=Golf&year=2018"
 ```
 
 ---
@@ -179,7 +179,7 @@ List of all vehicle manufacturers. Returns ~708 brands.
 
 ```bash
 curl -H "Authorization: Bearer TOKEN" \
-  "https://plan.parts/api/v1/aftermarket/catalog/brands"
+  "https://cdn.plan.parts/api/v1/aftermarket/catalog/brands"
 ```
 
 ---

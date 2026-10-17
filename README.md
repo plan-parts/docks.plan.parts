@@ -26,7 +26,7 @@ Official documentation for integrating with the [plan.parts](https://plan.parts)
 
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-     "https://plan.parts/api/v1/ping"
+     "https://cdn.plan.parts/api/v1/ping"
 ```
 
 ---
@@ -46,6 +46,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 | [Aftermarket (OEM / OE / IAM)](v1/aftermarket.md) | 15 | Cross-references, vehicle catalog, article search |
 | [VAG Catalog (ETKA)](v1/vag-catalog.md) | 13 | VW, Audi, Skoda, SEAT, Porsche OEM parts |
 | [PowerCatalog](v1/power-catalog.md) | 6 | ATVs, motorcycles, watercraft |
+| [VIN Decoder](v1/vin-decoder.md) | 1 | Universal VIN decode — manufacturer, model, vehicles |
 | [System](v1/system.md) | 1 | Health check and auth ping |
 | [Authentication](v1/authentication.md) | — | Token setup and error reference |
 | [Data Tasks](v1/data-tasks.md) | — | Managed bulk data enrichment jobs |

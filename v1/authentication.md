@@ -19,7 +19,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 **curl:**
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-     "https://plan.parts/api/v1/aftermarket/analogs?article=F026407123&brand=BOSCH"
+     "https://cdn.plan.parts/api/v1/aftermarket/analogs?article=F026407123&brand=BOSCH"
 ```
 
 **PHP (Guzzle / Laravel HTTP):**

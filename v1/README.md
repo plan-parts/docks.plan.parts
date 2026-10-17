@@ -7,7 +7,7 @@ This is the complete reference for the plan.parts REST API v1.
 ## Base URL
 
 ```
-https://plan.parts/api/v1
+https://cdn.plan.parts/api/v1
 ```
 
 ## Sections
@@ -18,6 +18,7 @@ https://plan.parts/api/v1
 | [Aftermarket (OEM / OE / IAM)](aftermarket.md) | 15 | Cross-references, vehicle catalog, article search |
 | [VAG Catalog (ETKA)](vag-catalog.md) | 13 | VW, Audi, Skoda, SEAT, Porsche OEM parts |
 | [PowerCatalog](power-catalog.md) | 6 | ATVs, motorcycles, watercraft |
+| [VIN Decoder](vin-decoder.md) | 1 | Universal VIN decode (manufacturer, model, vehicles) |
 | [System](system.md) | 1 | Health check and auth ping |
 | [Data Tasks](data-tasks.md) | — | Managed one-time data enrichment jobs |
 
@@ -27,7 +28,8 @@ https://plan.parts/api/v1
 |------|-----------|
 | Free | `/ping`, `/aftermarket/health`, `/vag/health`, `/pc/groups`, `/vag/catalogs` |
 | 1 token | Catalog browsing, vehicle lookup, suggest, article media/criteria |
-| 2 tokens | Article search, analogs, crosses, vehicles, parts listing |
+| 2 tokens | Article search, analogs, crosses, vehicles, parts listing, VAG VIN |
+| 50 tokens | Universal VIN Decoder `/vin/{vin}` |
 
 ## Getting Started
 
@@ -37,7 +39,7 @@ https://plan.parts/api/v1
 
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-     "https://plan.parts/api/v1/aftermarket/health"
+     "https://cdn.plan.parts/api/v1/aftermarket/health"
 ```
 
 ---
